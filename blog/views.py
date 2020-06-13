@@ -1,12 +1,12 @@
-
 from django.contrib import auth
-
 from django.http import JsonResponse
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse,redirect
 
-from blog.utils import validCode
 from blog import MyForms
 from blog.models import *
+from blog.utils import validCode
+
+
 # Create your views here.
 # 登录
 def login(request):
@@ -30,22 +30,23 @@ def login(request):
     return render(request, 'login.html')
 
 
-
 # 注册
 def registered(request):
     if request.is_ajax():
-        print(request.POST)
         form = MyForms.UserForm(request.POST)
-        response = {'user':None,'msg':None}
-
+        response = {'user': None, 'msg': None}
         if form.is_valid():
             user = form.cleaned_data.get('user')
             pwd = form.cleaned_data.get('pwd')
             email = form.cleaned_data.get('email')
             # 不用手动下载 django会自动下载到指定目录 如果没有指定就下载到项目根目录
             avatar_obj = request.FILES.get('avatar')
+            # 如果用户传的是一个空值，就不能传avatar值 而是让它走默认值
+            extra = {}
+            if avatar_obj:
+                extra['avatar'] = avatar_obj
             # 生成用户记录 这里avatar存的是文件在项目中的相对路径
-            UserInfo.objects.create_user(username=user,password=pwd,email=email,avatar=avatar_obj)
+            UserInfo.objects.create_user(username=user, password=pwd, email=email, **extra)
             # 返回给ajax的信息
             response['user'] = form.cleaned_data.get('user')
         else:
@@ -55,10 +56,15 @@ def registered(request):
     form = MyForms.UserForm()
     return render(request, 'registered.html', locals())
 
+# 注销
+def logout(request):
+    auth.logout(request)
+    return redirect('/index/')
 
 # 首页
 def index(request):
-    return render(request, 'index.html')
+    article_list = Article.objects.all()
+    return render(request, 'index.html',locals())
 
 
 # 图片验证码
@@ -68,3 +74,17 @@ def get_validCorde_img(request):
     '''
     data = validCode.get_valid_code_img(request)
     return HttpResponse(data)
+
+# 个人站点视图函数
+def home_site(request,username):
+
+    user = UserInfo.objects.filter(username=username).first()
+
+    if not user:
+        return render(request, '404.html')
+    # 查询当前站点对象
+    blog = user.blog
+    # 取出当前用户或者当前站点对应的所有文件
+    article_List = Article.objects.filter(user=user)
+    return render(request,'home_site.html',locals())
+

@@ -15,6 +15,7 @@ class UserInfo(AbstractUser):
     telephone = models.CharField(max_length=11, null=True, unique=True)
     # 存储头像文件 upload_to=文件存储的路径(如果没有这个文件夹会自动创建) 如果不写会存放到django项目的根目录
     # default=默认的文件路径
+    # FileField 可以存储任何文件包括(图片。视频，音频)
     avatar = models.FileField(upload_to='avatars/', default="/avatars/default.png")
     # 创建时间 verbose_name 注释 auto_now_add=True 在创建时自动添加当前时间
     create_time = models.DateTimeField(verbose_name='创建时间', auto_now_add=True)

@@ -14,12 +14,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
+from django.views.static import serve
+
 from blog import views
+from cnblog import settings
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.login),
+    path('registered/',views.registered),
+    path('logout/',views.logout),
+    path('get_validCorde_img/',views.get_validCorde_img),
     path('index/',views.index),
-    path('reguster/',views.registered),
-    path('get_validCorde_img/',views.get_validCorde_img)
+    re_path('^$', views.index),
+    # 关于个人站点的url
+    re_path('^(?P<username>\w+)$',views.home_site),
+    # media配置:
+    # 导入的模块
+    # from django.views.static import serve
+    # from cnblog import settings
+    re_path(r'media/(?P<path>.*)$',serve,{'document_root':settings.MEDIA_ROOT})
 ]
