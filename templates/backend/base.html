@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} cnblog {% endblock %}</title>
+    <link rel="stylesheet" href="/static/blog/css/home_site.css">
+    <link rel="stylesheet" href="/static/blog/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="/static/blog/js/jquery-3.5.1.min.js"></script>
+    <script src="/static/blog/kindeditor/kindeditor-all-min.js"></script>
+    <script src="/static/blog/kindeditor/lang/zh-CN.js"></script>
+
+</head>
+<body>
+<div class="header">
+    <div class="content">
+        <p class="title">
+            <span>{{ blog.title }}</span>
+        </p>
+    </div>
+</div>
+
+<div class="container" id="cn_backend_layout">
+    <div class="col-md-3">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">编辑</h3>
+            </div>
+            <div class="panel-body">
+                <a href="/cn_backend/add_article/">添加文章</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+</div>
+
+
+</body>
+<script src="/static/blog/js/togglable.js"></script>
+<script>
+    // 使用KindEditor 编辑器
+    KindEditor.ready(function (K) {
+        window.editor = K.create('#editor_id', {
+            width: '800', height: '500',
+            // 是否可以拖住 2是可以 1是只能上下 0是不允许 默认为2
+            resizeType: 0,
+            // 指定文件上传路径
+            uploadJson: '/upload/',
+            // 上传图片、Flash、视音频、文件时，支持添加别的参数一并传到服务器。
+            extraFileUploadParams: {
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+            },
+            // 指定上传文件form名称。
+            filePostName:'upload_img',
+        });
+    });
+</script>
+
+</html>

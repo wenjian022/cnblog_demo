@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} cnblog {% endblock %}</title>
+    <link rel="stylesheet" href="/static/blog/css/home_site.css">
+    <link rel="stylesheet" href="/static/blog/css/article.css">
+    <link rel="stylesheet" href="/static/blog/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="/static/blog/js/jquery-3.5.1.min.js"></script>
+    <style>
+        #content_header {
+            margin-top: -60px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="content">
+        <p class="title">
+            <span>{{ blog.title }}</span>
+        </p>
+    </div>
+    <div class="collapse navbar-collapse" id="content_header">
+        <ul class="nav navbar-nav navbar-right">
+            {% if request.user.is_authenticated %}
+                <li><a href="javascript:return false"><span id='user_icon'
+                                                            class="glyphicon glyphicon-user"></span>{{ request.user.username }}
+                </a></li>
+                <li><a href="/{{ request.user.username }}"><span id='user_icon'
+                                                                 class="glyphicon ">我的博客</span></a></li>
+                <li><a href="/cn_backend/"><span id='user_icon'
+                                                 class="glyphicon ">博客管理</span></a></li>
+                <li><a href="#"><span id='user_icon'
+                                      class="glyphicon"></span>设置</a></li>
+                <li><a href="/logout/"><span id='user_icon'
+                                             class="glyphicon"></span>注销</a></li>
+            {% else %}
+                <li><a href="/login/">登录</a></li>
+                <li><a href="/reguster/">注册</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+<div class="container" id="content">
+    <div class="row">
+        <div class="col-md-3">
+            {% load my_tags %}
+            {% get_classification_style username %}
+        </div>
+        <div class="col-md-9">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

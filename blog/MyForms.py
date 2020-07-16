@@ -37,4 +37,5 @@ class UserForm(forms.Form):
             else:
                 raise ValidationError('两次密码不一致')
         else:
+            # 全局钩子必须返回这个值
             return self.cleaned_data

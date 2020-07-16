@@ -36,26 +36,27 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <!-- 后期开发使用
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">随笔 <span class="sr-only">(current)</span></a></li>
-                <li class="active"><a href="#">新闻 <span class="sr-only">(current)</span></a></li>
-                <li class="active"><a href="#">博文 <span class="sr-only">(current)</span></a></li>
-            </ul>
+                    <li class="active"><a href="#">随笔 <span class="sr-only">(current)</span></a></li>
+                    <li class="active"><a href="#">新闻 <span class="sr-only">(current)</span></a></li>
+                    <li class="active"><a href="#">博文 <span class="sr-only">(current)</span></a></li>
+                </ul>
+            -->
 
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
+                    <li><a href="javascript:return false"><span id='user_icon'
+                                                                class="glyphicon glyphicon-user"></span>{{ request.user.username }}
+                    </a></li>
+                    <li><a href="/{{ request.user.username }}"><span id='user_icon'
+                                                                     class="glyphicon ">我的博客</span></a></li>
+                    <li><a href="/cn_backend/"><span id='user_icon'
+                                                     class="glyphicon ">博客管理</span></a></li>
                     <li><a href="#"><span id='user_icon'
-                                          class="glyphicon glyphicon-user"></span>{{ request.user.username }}</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">Dropdown <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">修改密码</a></li>
-                            <li><a href="#">修改头像</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="/logout/">注销</a></li>
-                        </ul>
-                    </li>
+                                          class="glyphicon"></span>设置</a></li>
+                    <li><a href="/logout/"><span id='user_icon'
+                                                 class="glyphicon"></span>注销</a></li>
                 {% else %}
                     <li><a href="/login/">登录</a></li>
                     <li><a href="/reguster/">注册</a></li>
@@ -99,11 +100,13 @@
             <div class="article_list">
                 {% for article in article_list %}
                     <div class="article_itme">
-                        <h5><a href="">{{ article.title }}</a></h5>
+                        <h5><a href="/{{ article.user.username }}/articles/{{ article.nid }}">{{ article.title }}</a>
+                        </h5>
                         <div class="article_desc">
                             <span class="media-left">
-                                <a href=""><img src='/media/{{ article.user.avatar }}' alt="" width="56"
-                                                height="56"></a>
+                                <a href="/{{ article.user.username }}"><img src='/media/{{ article.user.avatar }}'
+                                                                            alt="" width="56"
+                                                                            height="56"></a>
                             </span>
                             <span class="media-right">
                                 {{ article.desc }}
@@ -111,7 +114,7 @@
                         </div>
                     </div>
                     <div class="pub_info">
-                        <span><a href="">{{ article.user.username }}</a></span> &nbsp;&nbsp;&nbsp;
+                        <span><a href="/{{ article.user.username }}">{{ article.user.username }}</a></span> &nbsp;&nbsp;&nbsp;
                         <span>发布于 &nbsp;&nbsp;{{ article.create_time|date:"Y-m-d H:i" }}</span>&nbsp;&nbsp;&nbsp;
                         <span class="glyphicon glyphicon-comment"> 评论({{ article.comment_count }})</span>&nbsp;&nbsp;&nbsp;
                         <span class="glyphicon glyphicon-thumbs-up"> 点赞({{ article.up_count }})</span>

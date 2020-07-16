@@ -1,0 +1,105 @@
+<!-- 标签页 -->
+
+<div class="row">
+    <ul class="nav nav-tabs" role="tablist" id="myTab">
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
+                                                  data-toggle="tab">文章</a></li>
+        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">我的标签</a></li>
+        <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">随笔分类</a>
+        </li>
+    </ul>
+
+
+    <div class="tab-content">
+        <!-- 文章 -->
+        <div role="tabpanel" class="tab-pane active" id="home">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>标题</th>
+                    <th>评论数</th>
+                    <th>点赞</th>
+                    <th>操作</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if article_list %}
+                    {% for article in article_list %}
+                        <tr>
+                            <th scope="row"><a
+                                    href="/{{ user.username }}/articles/{{ article.nid }}">{{ article.title }}</a><span>  ({{ article.create_time|date:"Y-m-d H:i" }})</span>
+                            </th>
+                            <td>{{ article.comment_count }}</td>
+                            <td>{{ article.up_count }}</td>
+                            <td><a href="/edit/archive/{{ article.nid }}">编辑</a></td>
+                            <td><a href="">删除</a></td>
+                        </tr>
+                    {% endfor %}
+                    {% else %} <h3>还没有文章快点击这里---><a href="/cn_backend/add_article/">添加</a><----添加您的第一个文章吧</h3>
+                {% endif %}
+
+                </tbody>
+            </table>
+
+        </div>
+        <!-- 标签 -->
+        <div role="tabpanel" class="tab-pane" id="profile">
+            <div role="tabpanel" class="tab-pane active" id="home">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>操作</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if tag_list %}
+                        {% for tag in tag_list %}
+                            <tr>
+                                <td scope="row"><a
+                                        href="/{{ user.username }}/tag/{{ tag.title }}/">{{ tag.title }}</a>
+                                </td>
+                                <td><a href="/edit/tag/{{ tag.nid }}">编辑</a></td>
+                                <td><a href="">删除</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}  <h3>还没有标签快点击这里---><a href="">添加</a><----添加您的第一个标签吧</h3>
+                    {% endif %}
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <!-- 随笔 -->
+        <div role="tabpanel" class="tab-pane" id="messages">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>标题</th>
+                    <th>操作</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if category_list %}
+                    {% for category in category_list %}
+                        <tr>
+                            <th scope="row"><a
+                                    href="/{{ user.username }}/category/{{ category.title }}/">{{ category.title }}</a>
+                            </th>
+                            <td><a href="/edit/category/{{ category.nid }}">编辑</a></td>
+                            <td><a href="">删除</a></td>
+                        </tr>
+                    {% endfor %}
+                {% else %} <h3>还没有随笔分类快点击这里---><a href="">添加</a><----添加您的第一个随笔分类吧</h3>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
